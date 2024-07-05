@@ -54,16 +54,20 @@ def Droms(name,nb):
 
     time.sleep(100)
     driver.quit()
+selected_index = None
+
 def spawn_button():
+    global selected_index
+    
     window = Tk()
     window.title("Heisenberg en personne")
     window.geometry("1920x1080")
-    window.minsize(480 , 360)
+    window.minsize(480, 360)
     window.configure(bg='blue')
     window.config(background="#00FFD4")
 
     def assign_text(nombre):
-        return tab1[int(nombre]
+        return tab1[nombre]
 
     rows = len(tab1) // 5 + (1 if len(tab1) % 5 != 0 else 0)
 
@@ -75,15 +79,20 @@ def spawn_button():
     tab2 = [""] * len(tab1)
     nb = 0
 
+    def on_button_press(index):
+        global selected_index
+        selected_index = index
+        window.destroy()
+
     for i in range(rows):
         for j in range(5):
             if nb < len(tab1):
-                tab2[nb] = Button(window, font=('white', 20), text=tab1[nb], command = assign_text(tab2[nb]))
-                tab2[nb].grid(row=i, column=j, padx=10, pady=10, sticky="nsew")  # Utilisation de sticky pour étendre les boutons
+                tab2[nb] = Button(window, font=('white', 20), text=tab1[nb], command=lambda index=nb: on_button_press(index))
+                tab2[nb].grid(row=i, column=j, padx=10, pady=10, sticky="nsew")
                 nb += 1
 
     window.mainloop()
-    return None
+    return selected_index
 
 class TextBoxApp:
     def __init__(self):
@@ -98,7 +107,7 @@ class TextBoxApp:
 
     def capturer_texte(self, event=None):
         self.texte = self.text_box.get("1.0", tk.END).strip()
-        self.root.quit()
+        self.root.destroy()
 
     def run(self):
         self.root.mainloop()
@@ -109,4 +118,12 @@ def texteboxe():
     texte = app.run()
     return texte
 
-print(spawn_button())
+
+def download_Roms():
+    nombre = texteboxe()
+    print(nombre)
+    console = spawn_button()
+    print(console)
+    Droms(tab[console], nombre)
+
+download_Roms()
